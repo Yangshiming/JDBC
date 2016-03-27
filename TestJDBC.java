@@ -9,13 +9,20 @@ public class TestJDBC {
 		//load the driver
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
+<<<<<<< HEAD
 			//连接到数据库
+=======
+			//杩炴帴鍒版暟鎹簱
+>>>>>>> c9468033b0c41a7fe2bb235dbcfba865e568f5ee
 			connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/test","root","");
 
 			//execute the sql;
 			stmt = connection.createStatement();
+<<<<<<< HEAD
 			String mysql = "insert users1(username,pid) values('young','1')";
 			stmt.execute(mysql);
+=======
+>>>>>>> c9468033b0c41a7fe2bb235dbcfba865e568f5ee
 			rs = stmt.executeQuery("select* from users1");
 			while (rs.next()) {
 				System.out.println(rs.getInt("id"));
