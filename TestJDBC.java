@@ -1,8 +1,23 @@
 import java.sql.*;
+
+import org.omg.CORBA.StringHolder;
 public class TestJDBC {
 
 	public static void main(String[] args)   {
 		
+		//parse the data from user input
+		int userID = 0;
+		String name = null;
+		int age = 0;
+		try {
+			userID = Integer.parseInt(args[0]);
+			age = Integer.parseInt(args[2]);
+		} catch (NumberFormatException e) {
+			System.out.println("Parameter Error: UserID should be int, age should be int");
+			System.exit(-1);
+		}
+		name = args[1];
+
 		Connection connection = null;
 		Statement stmt = null;
 		ResultSet rs =null;
@@ -16,14 +31,15 @@ public class TestJDBC {
 
 			//execute the sql;
 			stmt = connection.createStatement();
-			String mysql = "insert users1(username,pid) values('young','1')";
+			String mysql = "insert student(id,name,age) values("+userID+",'"+name+"',"+age+")";
+			System.out.println(mysql);
 			stmt.execute(mysql);
 
-			rs = stmt.executeQuery("select* from users1");
+			rs = stmt.executeQuery("select* from student");
 			while (rs.next()) {
 				System.out.println(rs.getInt("id"));
-				System.out.println(rs.getString("username"));
-				System.out.println(rs.getInt("pid"));
+				System.out.println(rs.getString("name"));
+				System.out.println(rs.getInt("age"));
 			}
 		}catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
