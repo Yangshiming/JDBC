@@ -5,6 +5,7 @@ public class TestJDBC {
 
 	public static void main(String[] args)   {
 		
+		/** Insert user input data to database  **/		
 		//parse the data from user input
 		int userID = 0;
 		String name = null;
@@ -18,38 +19,50 @@ public class TestJDBC {
 		}
 		name = args[1];
 
+		
+		
+		/** the procedure of execute JDBC**/
 		Connection connection = null;
-		Statement stmt = null;
+		Statement stmt = null;           
 		ResultSet rs =null;
+		PreparedStatement pstmt = null;  //the subInterface of Statement , advanced and more function than Statement 
 		//load the driver
 		try {
+			//1. Loader the Driver
 			Class.forName("com.mysql.jdbc.Driver");
-
-			//连接到数据库
-
+			//2. get the connection to the database
 			connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/test","root","");
-
-			//execute the sql;
+			//3. execute the sql;
+				//3.1 the use of Statement
+			/**
 			stmt = connection.createStatement();
 			String mysql = "insert student(id,name,age) values("+userID+",'"+name+"',"+age+")";
-			System.out.println(mysql);
 			stmt.execute(mysql);
-
-			rs = stmt.executeQuery("select* from student");
+			System.out.println(mysql);
+			**/
+			
+				//3.2 the use of PreparedStatement 
+			pstmt = connection.prepareStatement("insert student(id,name,age) values(?,?,?)");
+			pstmt.setInt(1, userID);
+			pstmt.setString(2, name);
+			pstmt.setInt(3, age);
+			pstmt.execute();
+			
+			//4. retrieve the result data;
+			rs = pstmt.executeQuery("select* from student");
 			while (rs.next()) {
+			//5. Show the result data
 				System.out.println(rs.getInt("id"));
 				System.out.println(rs.getString("name"));
 				System.out.println(rs.getInt("age"));
 			}
 		}catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			
+			//7. close
 			try {
 				if (rs != null) {
 					rs.close();
@@ -61,7 +74,6 @@ public class TestJDBC {
 					connection.close();
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		} 
